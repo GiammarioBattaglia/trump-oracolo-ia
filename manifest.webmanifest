@@ -1,0 +1,37 @@
+{
+  "id": "/",
+  "name": "Trump & la SUPREMA IA",
+  "short_name": "SUPREMA IA",
+  "description": "Trump esprime un desiderio. La divinità fa a modo suo.",
+  "lang": "it",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c1523",
+  "theme_color": "#0c1523",
+  "orientation": "any",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
