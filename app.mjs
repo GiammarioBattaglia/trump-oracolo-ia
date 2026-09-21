@@ -14,11 +14,11 @@ const knownVignettes=new Set(NEW_VIGNETTES.map(x=>x.id));
 let seen=new Set();
 try { const ids=JSON.parse(read(KEY+'-vignettes')||'[]'); if(Array.isArray(ids))seen=new Set(ids.filter(id=>knownVignettes.has(id))); } catch {}
 let aiPending=false,skipRequested=false,history=[],unlocked=new Set(),sound=false,context,installPrompt=null,current=null,busy=false,run=0,toastTimer,assetsReady=false,showcaseMode=false;
-const SHOWCASE_POOL=[...new Set(ALL_EXAMPLES.map(x=>String(x).trim()).filter(Boolean))];
+const SHOWCASE_POOL=NEW_VIGNETTES.map(x=>x.wish);
 let showcaseSeen=new Set();
 try{const saved=JSON.parse(read(KEY+'-showcase-seen')||'[]');if(Array.isArray(saved))showcaseSeen=new Set(saved.filter(x=>SHOWCASE_POOL.includes(x)))}catch{}
-function updateShowcaseProgress(){const el=$('showcaseProgress');if(!el)return;el.textContent=showcaseSeen.size?showcaseSeen.size+' di '+SHOWCASE_POOL.length+' desideri ascoltati':'Ogni clic svela un desiderio diverso';}
-function nextShowcaseWish(){let remaining=SHOWCASE_POOL.filter(x=>!showcaseSeen.has(x));if(!remaining.length){showcaseSeen.clear();write(KEY+'-showcase-seen','[]');remaining=[...SHOWCASE_POOL];toast('Hai ascoltato tutti i desideri. La SUPREMA IA ricomincia da capo.');}const text=remaining[Math.floor(Math.random()*remaining.length)];showcaseSeen.add(text);write(KEY+'-showcase-seen',JSON.stringify([...showcaseSeen]));return text;}
+function updateShowcaseProgress(){const el=$('showcaseProgress');if(!el)return;el.textContent=showcaseSeen.size?showcaseSeen.size+' di '+SHOWCASE_POOL.length+' vignette scoperte':'Ogni clic svela una vignetta diversa';}
+function nextShowcaseWish(){let remaining=SHOWCASE_POOL.filter(x=>!showcaseSeen.has(x));if(!remaining.length){showcaseSeen.clear();write(KEY+'-showcase-seen','[]');remaining=[...SHOWCASE_POOL];toast('Hai scoperto tutte le vignette. La SUPREMA IA ricomincia da capo.');}const text=remaining[Math.floor(Math.random()*remaining.length)];showcaseSeen.add(text);write(KEY+'-showcase-seen',JSON.stringify([...showcaseSeen]));return text;}
 function read(key){try{return localStorage.getItem(key)}catch{return null}}
 function write(key,value){try{localStorage.setItem(key,value)}catch{}}
 history=restoreHistory(read(KEY+'-history'));
