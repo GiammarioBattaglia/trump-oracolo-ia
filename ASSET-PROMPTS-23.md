@@ -15,4 +15,4 @@ Create one polished satirical caricature for Trump & la SUPREMA IA, matching the
 
 ## Integrazione
 
-Nuova scena in `new-vignettes.mjs`, inclusa automaticamente nel ciclo senza ripetizioni e nei link al desiderio. Aggiornati i conteggi a 23 vignette / 85 esempi e la cache PWA a `suprema-5`. Conservati i desideri e le immagini esistenti.
+Nuova scena in `new-vignettes.mjs`, inclusa automaticamente nel ciclo senza ripetizioni e nei link al desiderio. Aggiornati i conteggi a 23 vignette / 85 esempi e la cache PWA a `suprema-6`. Conservati i desideri e le immagini esistenti.
