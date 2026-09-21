@@ -1,5 +1,5 @@
 const CACHE='trump-oracle-suprema-2';
-const ASSETS=['/','/index.html','/styles.css?v=suprema-2','/app.mjs?v=suprema-2','/wish-engine.mjs?v=suprema-2','/wish-library.mjs?v=suprema-2','/props.mjs?v=suprema-2','/new-vignettes.mjs?v=suprema-2','/gallery.mjs?v=suprema-2','/manifest.webmanifest','/assets/temple.webp','/assets/characters.webp','/assets/icon-192.png','/assets/icon-512.png','/assets/icon-180.png','/assets/icon-maskable.png','/assets/body.woff','/assets/body-bold.woff'];
+const ASSETS=['/','/index.html','/styles.css?v=suprema-2','/app.mjs?v=suprema-2','/wish-engine.mjs?v=suprema-1','/wish-library.mjs?v=suprema-1','/props.mjs?v=suprema-1','/new-vignettes.mjs?v=suprema-1','/gallery.mjs?v=suprema-1','/manifest.webmanifest','/assets/temple.webp','/assets/characters.webp','/assets/icon-192.png','/assets/icon-512.png','/assets/icon-180.png','/assets/icon-maskable.png','/assets/body.woff','/assets/body-bold.woff'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('trump-oracle-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
