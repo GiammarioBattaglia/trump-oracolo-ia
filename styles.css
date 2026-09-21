@@ -39,3 +39,28 @@ dialog{border:1px solid #677181;border-radius:15px;background:#152234;color:#f2e
 @media(prefers-reduced-motion:reduce){.vignette-card:hover:not(:disabled){transform:none}}
 
 h1 em{font-style:italic}
+
+
+/* Home semplificata: vignetta + un solo invito all'azione */
+.game-layout{display:block;max-width:1000px;margin:0 auto}
+.theatre-column{width:100%}
+.wish-panel{display:none!important}
+.speech{display:none!important}
+.scene-note{display:none!important}
+.result-actions{display:none!important}
+.showcase-wish{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);z-index:8;width:min(82%,760px);padding:14px 20px 16px;text-align:center;background:#091422e8;border-top:1px solid #d9bd7c;border-bottom:1px solid #d9bd7c;box-shadow:0 12px 35px #0008;backdrop-filter:blur(8px)}
+.showcase-wish span{display:block;color:var(--gold);font-size:10px;letter-spacing:.16em;font-weight:700;margin-bottom:6px}
+.showcase-wish strong{display:block;font:400 clamp(18px,2.2vw,28px)/1.25 Georgia,serif;color:#fff4dc}
+.showcase-wish[hidden]{display:none!important}
+.showcase-button{display:flex;align-items:center;justify-content:center;margin:22px auto 8px;width:min(100%,520px);min-height:58px;padding:14px 24px;border:1px solid #f5dfa9;border-radius:8px;background:linear-gradient(115deg,#f1d99f,#d8b76d);color:#152033;font-size:14px;font-weight:800;letter-spacing:.08em;box-shadow:0 10px 35px #0005;cursor:pointer;transition:transform .18s,filter .18s}
+.showcase-button:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px)}
+.showcase-button:disabled{cursor:wait;opacity:.82}
+.showcase-progress{text-align:center;margin:8px 0 2px;color:#9eabc0;font-size:11px;letter-spacing:.03em}
+.result{max-width:860px;margin:0 auto;padding-top:25px}
+@media(max-width:760px){
+ .game-layout{max-width:none}
+ .showcase-wish{bottom:43px;width:88%;padding:11px 13px 12px}
+ .showcase-wish strong{font-size:clamp(16px,5vw,21px)}
+ .showcase-button{margin-top:16px;min-height:54px;font-size:12px}
+ .showcase-progress{font-size:10px}
+}
