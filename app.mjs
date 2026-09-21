@@ -4,7 +4,7 @@ import { PROPS } from './props.mjs?v=suprema-1';
 import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-1';
 import { mountGallery } from './gallery.mjs?v=suprema-1';
 const $=id=>document.getElementById(id);
-const stage=$('stage'),actor=$('actor'),wish=$('wish'),form=$('wishForm');
+const stage=$('stage'),actor=$('actor'),wish=$('wish'),form=$('wishForm'),showcaseButton=$('showcaseButton'),showcaseWish=$('showcaseWish'),showcaseWishText=$('showcaseWishText');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const KEY='trump-oracle-v2';
 const descriptions=['Trump in ginocchio con le mani giunte','Trump trasformato in un rospo con ciuffo biondo e cravatta rossa','Trump sconfitto, seduto con una bandiera bianca','Trump mostra le tasche vuote','Trump su un trono di cartone con una corona di carta','Trump con cappello da giullare e libro capovolto','Trump si inchina davanti a tre anatre','Trump trasformato in un palloncino gonfiabile'];
@@ -13,7 +13,12 @@ let gallery;
 const knownVignettes=new Set(NEW_VIGNETTES.map(x=>x.id));
 let seen=new Set();
 try { const ids=JSON.parse(read(KEY+'-vignettes')||'[]'); if(Array.isArray(ids))seen=new Set(ids.filter(id=>knownVignettes.has(id))); } catch {}
-let aiPending=false,skipRequested=false,history=[],unlocked=new Set(),sound=false,context,installPrompt=null,current=null,busy=false,run=0,toastTimer,assetsReady=false;
+let aiPending=false,skipRequested=false,history=[],unlocked=new Set(),sound=false,context,installPrompt=null,current=null,busy=false,run=0,toastTimer,assetsReady=false,showcaseMode=false;
+const SHOWCASE_POOL=[...new Set(ALL_EXAMPLES.map(x=>String(x).trim()).filter(Boolean))];
+let showcaseSeen=new Set();
+try{const saved=JSON.parse(read(KEY+'-showcase-seen')||'[]');if(Array.isArray(saved))showcaseSeen=new Set(saved.filter(x=>SHOWCASE_POOL.includes(x)))}catch{}
+function updateShowcaseProgress(){const el=$('showcaseProgress');if(!el)return;el.textContent=showcaseSeen.size?showcaseSeen.size+' di '+SHOWCASE_POOL.length+' desideri ascoltati':'Ogni clic svela un desiderio diverso';}
+function nextShowcaseWish(){let remaining=SHOWCASE_POOL.filter(x=>!showcaseSeen.has(x));if(!remaining.length){showcaseSeen.clear();write(KEY+'-showcase-seen','[]');remaining=[...SHOWCASE_POOL];toast('Hai ascoltato tutti i desideri. La SUPREMA IA ricomincia da capo.');}const text=remaining[Math.floor(Math.random()*remaining.length)];showcaseSeen.add(text);write(KEY+'-showcase-seen',JSON.stringify([...showcaseSeen]));return text;}
 function read(key){try{return localStorage.getItem(key)}catch{return null}}
 function write(key,value){try{localStorage.setItem(key,value)}catch{}}
 history=restoreHistory(read(KEY+'-history'));
@@ -26,7 +31,7 @@ const propBox=$('prop');
 function hideProp(){propBox.hidden=true;propBox.classList.remove('pop');propBox.textContent='';delete propBox.dataset.id;}
 function showProp(id){const item=id&&Object.hasOwn(PROPS,id)?PROPS[id]:null;if(!item){hideProp();return;}if(!propBox.hidden&&propBox.dataset.id===id)return;propBox.innerHTML='<svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">'+item.svg+'</svg>';propBox.dataset.id=id;propBox.setAttribute('role','img');propBox.setAttribute('aria-label',item.alt);propBox.hidden=false;propBox.classList.remove('pop');if(!reduced.matches){void propBox.offsetWidth;propBox.classList.add('pop');}}
 function showActor(index,motion='idle'){actor.className='actor actor-'+index+' '+(reduced.matches?'':motion);actor.setAttribute('aria-label',descriptions[index]);}
-function controls(disabled){busy=disabled;$('nextVignette').disabled=disabled;$('pray').disabled=disabled;$('random').disabled=disabled;wish.disabled=disabled;document.querySelectorAll('[data-wish]').forEach(b=>b.disabled=disabled);$('moreExamples').disabled=disabled;$('prayLabel').textContent=disabled?'L’IA sta ascoltando…':'Prega l’IA';$('skipAnimation').hidden=!disabled;}
+function controls(disabled){busy=disabled;$('nextVignette').disabled=disabled;$('pray').disabled=disabled;$('random').disabled=disabled;wish.disabled=disabled;showcaseButton.disabled=disabled;document.querySelectorAll('[data-wish]').forEach(b=>b.disabled=disabled);$('moreExamples').disabled=disabled;$('prayLabel').textContent=disabled?'L’IA sta ascoltando…':'Prega l’IA';if(disabled)showcaseButton.textContent='LA SUPREMA IA STA PENSANDO…';$('skipAnimation').hidden=!disabled;}
 function audioReady(){if(!sound)return;try{context??=new(window.AudioContext||window.webkitAudioContext)();context.resume().catch(()=>{});}catch{sound=false;renderSound();}}
 function chime(kind){if(!sound||!context)return;const notes=kind==='result'?[659.25,523.25,329.63]:[261.63,392,523.25];notes.forEach((frequency,i)=>{const t=context.currentTime+i*.16;const o=context.createOscillator(),g=context.createGain();o.type='sine';o.frequency.value=frequency;o.connect(g);g.connect(context.destination);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.055,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+.5);o.start(t);o.stop(t+.52);});}
 function renderSound(){$('sound').setAttribute('aria-pressed',String(sound));$('sound').setAttribute('aria-label',sound?'Disattiva suoni':'Attiva suoni');$('sound').style.color=sound?'#edd398':'';const p=$('sound').querySelector('path');p.setAttribute('d',sound?'M4 9h4l5-4v14l-5-4H4zM17 8c3 2 3 6 0 8m3-11c5 4 5 10 0 14':'M4 9h4l5-4v14l-5-4H4zM17 9l5 6m0-6-5 6');}
@@ -46,8 +51,8 @@ function showIllustration(scene){
  vignetteImage.onerror=()=>{$('artUnavailable').textContent=navigator.onLine?'La vignetta non si è caricata. Riprova tra un momento.':'Collegati per caricare questa vignetta. La battuta è qui sotto.';$('artUnavailable').hidden=false;};
  vignetteImage.src=scene.image;
 }
-function reset(){showIllustration(null);run++;aiPending=false;skipRequested=false;controls(false);current=null;stage.dataset.state='idle';stage.dataset.scene='prayer';$('sceneLabel').textContent='IL TEMPIO DEI DESIDERI';$('speech').textContent='Ti ascolto, Donald.';$('stageStatus').textContent='La SUPREMA IA è in ascolto';showActor(0);hideProp();$('result').hidden=true;$('sceneNote').hidden=false;$('resultTitle').textContent='';}
-function finish(scene,persist=true){run++;aiPending=false;current=scene;stage.dataset.state='result';stage.dataset.scene=scene.key;showActor(scene.actor,scene.motion);showProp(scene.prop);showIllustration(scene);$('speech').textContent=scene.line;$('sceneLabel').textContent=scene.label.toUpperCase();$('stageStatus').textContent=statusFor(scene);$('resultLabel').textContent=scene.label.toUpperCase();$('resultTitle').textContent=scene.title;$('resultLine').textContent='“'+scene.line+'”';$('resultLine').hidden=!scene.image;$('nextVignette').hidden=!scene.id;$('resultText').textContent=scene.text;$('resultWish').textContent='Hai chiesto: “'+scene.wish+'”';$('result').hidden=false;$('sceneNote').hidden=true;controls(false);if(persist)saveScene(scene);$('resultTitle').focus({preventScroll:true});}
+function reset(){showIllustration(null);run++;aiPending=false;skipRequested=false;controls(false);current=null;showcaseMode=false;showcaseWish.hidden=true;showcaseButton.textContent='ASCOLTA COSA CHIEDE';stage.dataset.state='idle';stage.dataset.scene='prayer';$('sceneLabel').textContent='IL TEMPIO DEI DESIDERI';$('speech').textContent='';$('stageStatus').textContent='La SUPREMA IA è in ascolto';showActor(0);hideProp();$('result').hidden=true;$('sceneNote').hidden=false;$('resultTitle').textContent='';updateShowcaseProgress();}
+function finish(scene,persist=true){run++;aiPending=false;current=scene;stage.dataset.state='result';stage.dataset.scene=scene.key;showActor(scene.actor,scene.motion);showProp(scene.prop);showIllustration(scene);showcaseWish.hidden=true;$('speech').textContent='';$('sceneLabel').textContent=scene.label.toUpperCase();$('stageStatus').textContent=statusFor(scene);$('resultLabel').textContent=scene.label.toUpperCase();$('resultTitle').textContent=scene.title;$('resultLine').textContent='“'+scene.line+'”';$('resultLine').hidden=!scene.image;$('nextVignette').hidden=!scene.id;$('resultText').textContent=scene.text;$('resultWish').textContent='Trump aveva chiesto: “'+scene.wish+'”';$('result').hidden=false;$('sceneNote').hidden=true;controls(false);if(showcaseMode){showcaseButton.textContent='ASCOLTA UN ALTRO DESIDERIO';updateShowcaseProgress();}if(persist)saveScene(scene);$('resultTitle').focus({preventScroll:true});}
 const pause=ms=>skipRequested?Promise.resolve():new Promise(r=>setTimeout(r,ms));
 const MOTION={1:'hop',2:'sway',3:'shake',4:'wobble',5:'wobble',6:'bow',7:'float'};
 function statusFor(scene){if(scene.source==='ai')return 'Risposta inventata ora dall’IA';if(scene.source==='fallback')return 'IA non raggiungibile · scherzo preparato';if(scene.source==='skipped')return 'Attesa saltata · scherzo preparato';return scene.image?'Vignetta '+scene.id.slice(0,2)+' di '+NEW_VIGNETTES.length+' · '+scene.category:scene.fallback?'La SUPREMA IA improvvisa uno scherzo':'Desiderio esaudito… a modo suo';}
@@ -63,15 +68,16 @@ async function askOracle(text){
   return {actor:s.actor,label:s.label,title:s.title,line:s.line,text:s.text,motion:MOTION[s.actor]};
  }catch{return null}finally{clearTimeout(timer)}
 }
-async function play(){
+async function play(options={}){
  if(busy)return;
+ const showcase=options.showcase===true;
  const local=resolveWish(wish.value);
  if(!local){$('inputError').textContent='Scrivi un desiderio prima di pregare l’IA.';$('inputError').hidden=false;wish.setAttribute('aria-invalid','true');wish.focus();return;}
  if(!assetsReady){toast('Il tempio si sta aprendo. Riprova tra un momento.');return;}
  const useAI=!local.curated;
  local.source=useAI?'fallback':'preset';
  const oracle=useAI?askOracle(local.wish):null;
- audioReady();reset();current=local;controls(true);const token=++run;focusStage();
+ audioReady();reset();current=local;if(showcase){showcaseMode=true;showcaseWishText.textContent='“'+local.wish+'”';showcaseWish.hidden=false;showcaseButton.textContent='LA SUPREMA IA STA PENSANDO…';}controls(true);const token=++run;focusStage();
  aiPending=useAI;skipRequested=false;
  if(oracle)oracle.then(answer=>{if(token!==run)return;aiPending=false;if(answer)current={...local,...answer,key:'oracle',fallback:false,source:'ai'};});
  stage.dataset.state='praying';showActor(0,'praying');$('speech').textContent='Fammi capire. Vuoi proprio questo?';$('stageStatus').textContent='La preghiera sale…';chime('prayer');
@@ -80,12 +86,15 @@ async function play(){
  await pause(reduced.matches?100:900);if(token!==run)return;
  if(oracle){if(aiPending){$('speech').textContent='Un attimo… cerco la beffa perfetta.';$('stageStatus').textContent='La SUPREMA IA sta ragionando…';}await oracle;if(token!==run)return;if(skipRequested){finish(current);return;}}
  const scene=current;
+ if(showcase)showcaseWish.hidden=true;
  stage.dataset.state='transforming';showActor(0,'morph-out');$('speech').textContent='Desiderio esaudito… a modo mio.';particles();
  await pause(reduced.matches?50:520);if(token!==run)return;
  showActor(scene.actor,'morph-in');showProp(scene.prop);chime('result');
  await pause(reduced.matches?50:650);if(token!==run)return;
  finish(scene);
 }
+function playShowcase(){if(busy)return;wish.value=nextShowcaseWish();setCounter();play({showcase:true});}
+showcaseButton.addEventListener('click',playShowcase);
 form.noValidate=true;form.addEventListener('submit',e=>{e.preventDefault();play()});wish.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();play()}});
 $('skipAnimation').addEventListener('click',()=>{if(!current)return;if(aiPending&&!skipRequested){skipRequested=true;$('speech').textContent='Un attimo… cerco la beffa perfetta.';$('stageStatus').textContent='La SUPREMA IA sta ragionando…';return;}finish(aiPending?{...current,source:'skipped'}:current);});
 $('again').addEventListener('click',()=>{reset();wish.value='';setCounter();wish.focus({preventScroll:true});wish.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'center'})});
@@ -115,7 +124,7 @@ document.querySelectorAll('[data-close]').forEach(button=>button.addEventListene
 document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog){const b=dialog.getBoundingClientRect();if(event.clientX<b.left||event.clientX>b.right||event.clientY<b.top||event.clientY>b.bottom)dialog.close();}}));
 function onlineStatus(){$('offlineStatus').textContent=navigator.onLine?'':'Sei offline · il gioco continua';}window.addEventListener('online',onlineStatus);window.addEventListener('offline',onlineStatus);
 if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('/sw.js');await navigator.serviceWorker.ready;if(navigator.onLine)$('offlineStatus').textContent='Disponibile anche offline';else onlineStatus();}catch{$('offlineStatus').textContent='Modalità online';}});}
-renderHistory();renderCollection();onlineStatus();setCounter();
+renderHistory();renderCollection();onlineStatus();setCounter();updateShowcaseProgress();
 const sources=['/assets/temple.webp','/assets/characters.webp'];
 Promise.all(sources.map(src=>new Promise((resolve,reject)=>{const i=new Image();i.onload=resolve;i.onerror=reject;i.src=src}))).then(()=>{assetsReady=true;const shared=new URLSearchParams(location.hash.slice(1)).get('wish');if(shared){wish.value=shared.slice(0,220);setCounter();play();}}).catch(()=>{toast('Una scena non si è caricata. Ricarica la pagina per riprovare.');$('stageStatus').textContent='Caricamento incompleto · ricarica la pagina';});
 
