@@ -51,6 +51,10 @@ function showIllustration(scene){
  vignetteImage.onerror=()=>{$('artUnavailable').textContent=navigator.onLine?'La vignetta non si è caricata. Riprova tra un momento.':'Collegati per caricare questa vignetta. La battuta è qui sotto.';$('artUnavailable').hidden=false;};
  vignetteImage.src=scene.image;
 }
+function preloadIllustration(scene){
+ if(!scene?.image)return Promise.resolve();
+ return new Promise(resolve=>{const image=new Image();image.onload=resolve;image.onerror=resolve;image.src=scene.image;});
+}
 function reset(){showIllustration(null);run++;aiPending=false;skipRequested=false;controls(false);current=null;showcaseMode=false;showcaseWish.hidden=true;showcaseButton.textContent='ASCOLTA COSA CHIEDE';stage.dataset.state='idle';stage.dataset.scene='prayer';$('sceneLabel').textContent='IL TEMPIO DEI DESIDERI';$('speech').textContent='';$('stageStatus').textContent='La SUPREMA IA è in ascolto';showActor(0);hideProp();$('result').hidden=true;$('sceneNote').hidden=false;$('resultTitle').textContent='';updateShowcaseProgress();}
 function finish(scene,persist=true){run++;aiPending=false;current=scene;stage.dataset.state='result';stage.dataset.scene=scene.key;showActor(scene.actor,scene.motion);showProp(scene.prop);showIllustration(scene);showcaseWish.hidden=true;$('speech').textContent='';$('sceneLabel').textContent=scene.label.toUpperCase();$('stageStatus').textContent=statusFor(scene);$('resultLabel').textContent=scene.label.toUpperCase();$('resultTitle').textContent=scene.title;$('resultLine').textContent='“'+scene.line+'”';$('resultLine').hidden=!scene.image;$('nextVignette').hidden=!scene.id;$('resultText').textContent=scene.text;$('resultWish').textContent='Trump aveva chiesto: “'+scene.wish+'”';$('result').hidden=false;$('sceneNote').hidden=true;controls(false);if(showcaseMode){showcaseButton.textContent='ASCOLTA UN ALTRO DESIDERIO';updateShowcaseProgress();}if(persist)saveScene(scene);$('resultTitle').focus({preventScroll:true});}
 const pause=ms=>skipRequested?Promise.resolve():new Promise(r=>setTimeout(r,ms));
@@ -77,6 +81,7 @@ async function play(options={}){
  const useAI=!local.curated;
  local.source=useAI?'fallback':'preset';
  const oracle=useAI?askOracle(local.wish):null;
+ const illustrationReady=local.image?preloadIllustration(local):null;
  audioReady();reset();current=local;if(showcase){showcaseMode=true;showcaseWishText.textContent='“'+local.wish+'”';showcaseWish.hidden=false;showcaseButton.textContent='LA SUPREMA IA STA PENSANDO…';}controls(true);const token=++run;focusStage();
  aiPending=useAI;skipRequested=false;
  if(oracle)oracle.then(answer=>{if(token!==run)return;aiPending=false;if(answer)current={...local,...answer,key:'oracle',fallback:false,source:'ai'};});
@@ -87,6 +92,11 @@ async function play(options={}){
  if(oracle){if(aiPending){$('speech').textContent='Un attimo… cerco la beffa perfetta.';$('stageStatus').textContent='La SUPREMA IA sta ragionando…';}await oracle;if(token!==run)return;if(skipRequested){finish(current);return;}}
  const scene=current;
  if(showcase)showcaseWish.hidden=true;
+ if(scene.image){
+  $('stageStatus').textContent='La SUPREMA IA ha deciso…';
+  if(illustrationReady)await illustrationReady;if(token!==run)return;
+  chime('result');particles();finish(scene);return;
+ }
  stage.dataset.state='transforming';showActor(0,'morph-out');$('speech').textContent='Desiderio esaudito… a modo mio.';particles();
  await pause(reduced.matches?50:520);if(token!==run)return;
  showActor(scene.actor,'morph-in');showProp(scene.prop);chime('result');

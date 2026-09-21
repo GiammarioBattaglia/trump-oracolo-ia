@@ -64,3 +64,8 @@ h1 em{font-style:italic}
  .showcase-button{margin-top:16px;min-height:54px;font-size:12px}
  .showcase-progress{font-size:10px}
 }
+
+
+/* Esperienza a schermata unica */
+.gallery-section,
+.history-section{display:none!important}
