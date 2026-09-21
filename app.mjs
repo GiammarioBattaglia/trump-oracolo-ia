@@ -1,8 +1,8 @@
 
-import { ALL_EXAMPLES, CHIPS, resolveWish, restoreHistory } from './wish-engine.mjs?v=suprema-1';
+import { ALL_EXAMPLES, CHIPS, resolveWish, restoreHistory } from './wish-engine.mjs?v=suprema-5';
 import { PROPS } from './props.mjs?v=suprema-1';
-import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-1';
-import { mountGallery } from './gallery.mjs?v=suprema-1';
+import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-5';
+import { mountGallery } from './gallery.mjs?v=suprema-5';
 const $=id=>document.getElementById(id);
 const stage=$('stage'),actor=$('actor'),wish=$('wish'),form=$('wishForm'),showcaseButton=$('showcaseButton'),showcaseWish=$('showcaseWish'),showcaseWishText=$('showcaseWishText');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');

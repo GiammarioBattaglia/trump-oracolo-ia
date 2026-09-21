@@ -1,5 +1,5 @@
 import { LIBRARY, ACTOR_MOTION } from './wish-library.mjs?v=suprema-1';
-import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-1';
+import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-5';
 export const EXAMPLES=['Voglio diventare più affascinante di Brad Pitt','Voglio vincere la guerra','Voglio essere il più ricco del mondo','Voglio che tutti mi applaudano','Voglio comandare il mondo','Voglio essere un genio infallibile','Voglio essere forte come Superman','Voglio una corona d’oro','Voglio essere invisibile','Voglio volare più in alto di tutti','Voglio vincere il premio Nobel','Voglio un milione di follower'];
 export const ALL_EXAMPLES=[...EXAMPLES,...LIBRARY.map(x=>x.wish),...NEW_VIGNETTES.map(x=>x.wish)];
 export const CHIPS=[...NEW_VIGNETTES,...LIBRARY].map(x=>({wish:x.wish,label:x.chip}));

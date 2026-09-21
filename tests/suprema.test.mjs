@@ -11,9 +11,9 @@ import vm from 'node:vm';
 const require=createRequire(import.meta.url);
 const oracle=require('../api/oracle.js');
 
-test('22 vignette completate, 22 desideri originali, 84 esempi in totale',()=>{
- assert.equal(NEW_VIGNETTES.length,22);assert.equal(ALL_EXAMPLES.length,84);
- for(const key of ['id','wish','title','line','image'])assert.equal(new Set(NEW_VIGNETTES.map(x=>x[key])).size,22,key);
+test('23 vignette completate, 23 desideri originali, 85 esempi in totale',()=>{
+ assert.equal(NEW_VIGNETTES.length,23);assert.equal(ALL_EXAMPLES.length,85);
+ for(const key of ['id','wish','title','line','image'])assert.equal(new Set(NEW_VIGNETTES.map(x=>x[key])).size,23,key);
  const previous=new Set(LIBRARY.map(x=>x.wish));
  for(const item of NEW_VIGNETTES){
   assert(!previous.has(item.wish));assert(item.wish.length<=220);
@@ -27,7 +27,7 @@ test('22 vignette completate, 22 desideri originali, 84 esempi in totale',()=>{
 });
 
 test('Ricerca e temi restituiscono le vignette corrette',()=>{
- assert.equal(filterVignettes().length,22);
+ assert.equal(filterVignettes().length,23);
  const affari=filterVignettes('','Affari');assert.equal(affari.length,10);assert(affari.every(x=>x.category==='Affari'));
  assert(filterVignettes('LIQUIDITA').some(x=>x.id==='12-liquidita-infinita'));
  assert.equal(filterVignettes('parola inesistente zzzz').length,0);
@@ -40,7 +40,7 @@ test('Tutte le immagini sono WebP reali, distinte e non vuote',async()=>{
   assert.equal(data.toString('ascii',0,4),'RIFF');assert.equal(data.toString('ascii',8,12),'WEBP');assert((await stat(file)).size>20000);
   hashes.add(createHash('sha256').update(data).digest('hex'));
  }
- assert.equal(hashes.size,22);
+ assert.equal(hashes.size,23);
 });
 
 test('Il backend conserva provider, validazione e protezione delle risposte',()=>{

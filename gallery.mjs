@@ -1,4 +1,4 @@
-import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-1';
+import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-5';
 
 const normalize=value=>String(value).toLocaleLowerCase('it').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 export function filterVignettes(query='',category='all'){

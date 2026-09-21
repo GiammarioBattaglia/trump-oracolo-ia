@@ -1,4 +1,4 @@
-// Vignette già completate prima dello stop richiesto: 22.
+// Vignette illustrate, ciascuna associata al proprio desiderio.
 export const NEW_VIGNETTES=[
   {
     "id": "01-mondo-tasca",
@@ -285,5 +285,18 @@ export const NEW_VIGNETTES=[
     "text": "Una gigantesca copertina di rivista diventa una coperta. Trump si ritrova a letto, avvolto nel proprio ritratto e pronto per il riposo mediatico.",
     "alt": "Una gigantesca copertina di rivista diventa una coperta. Trump si ritrova a letto, avvolto nel proprio ritratto e pronto per il riposo mediatico.",
     "image": "/assets/vignettes/22-sempre-copertina.webp"
+  },
+  {
+    "id": "23-pizza-finta-meloni",
+    "category": "A tavola",
+    "wish": "Voglio una vera pizza italiana!",
+    "chip": "una vera pizza italiana",
+    "actor": 4,
+    "label": "A tavola",
+    "title": "Pizza italiana. Impasto di cartone.",
+    "line": "Concesso. Croccante fuori, cartone dentro.",
+    "text": "Giorgia Meloni serve una pizza dall’aspetto invitante. Trump addenta una fetta e scopre che pomodoro e mozzarella sono dipinti sul cartone.",
+    "alt": "Caricature di Donald Trump che addenta una pizza di cartone e di Giorgia Meloni che gli porge il vassoio.",
+    "image": "/assets/vignettes/23-pizza-finta-meloni.webp"
   }
 ];
