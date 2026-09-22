@@ -298,5 +298,18 @@ export const NEW_VIGNETTES=[
     "text": "Giorgia Meloni serve una pizza dall’aspetto invitante. Trump addenta una fetta e scopre che pomodoro e mozzarella sono dipinti sul cartone.",
     "alt": "Caricature di Donald Trump che addenta una pizza di cartone e di Giorgia Meloni che gli porge il vassoio.",
     "image": "/assets/vignettes/23-pizza-finta-meloni.webp"
+  },
+  {
+    "id": "24-trump-tv",
+    "category": "Fama",
+    "wish": "Voglio che tutto il mondo mi ascolti!",
+    "chip": "che tutto il mondo mi ascolti",
+    "actor": 6,
+    "label": "Fama",
+    "title": "Trump TV. In onda, senza pubblico.",
+    "line": "Trasmetti ovunque. Ti ascoltano le poltrone.",
+    "text": "La SUPREMA IA lo trasforma in un televisore con ciuffo e cravatta. Trump continua il suo discorso davanti a una sala di poltrone completamente vuote.",
+    "alt": "Caricatura di Trump trasformato in un televisore con ciuffo biondo e cravatta rossa, che trasmette un discorso davanti a una sala vuota.",
+    "image": "/assets/vignettes/24-trump-tv.webp"
   }
 ];

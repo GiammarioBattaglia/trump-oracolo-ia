@@ -1,8 +1,8 @@
 
-import { ALL_EXAMPLES, CHIPS, resolveWish, restoreHistory } from './wish-engine.mjs?v=suprema-5';
+import { ALL_EXAMPLES, CHIPS, resolveWish, restoreHistory } from './wish-engine.mjs?v=suprema-7';
 import { PROPS } from './props.mjs?v=suprema-1';
-import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-5';
-import { mountGallery } from './gallery.mjs?v=suprema-5';
+import { NEW_VIGNETTES } from './new-vignettes.mjs?v=suprema-7';
+import { mountGallery } from './gallery.mjs?v=suprema-7';
 const $=id=>document.getElementById(id);
 const stage=$('stage'),actor=$('actor'),wish=$('wish'),form=$('wishForm'),showcaseButton=$('showcaseButton'),showcaseWish=$('showcaseWish'),showcaseWishText=$('showcaseWishText');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -137,4 +137,3 @@ if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{aw
 renderHistory();renderCollection();onlineStatus();setCounter();updateShowcaseProgress();
 const sources=['/assets/temple.webp','/assets/characters.webp'];
 Promise.all(sources.map(src=>new Promise((resolve,reject)=>{const i=new Image();i.onload=resolve;i.onerror=reject;i.src=src}))).then(()=>{assetsReady=true;const shared=new URLSearchParams(location.hash.slice(1)).get('wish');if(shared){wish.value=shared.slice(0,220);setCounter();play();}}).catch(()=>{toast('Una scena non si è caricata. Ricarica la pagina per riprovare.');$('stageStatus').textContent='Caricamento incompleto · ricarica la pagina';});
-

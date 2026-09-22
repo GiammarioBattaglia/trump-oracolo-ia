@@ -6,8 +6,8 @@ Gioco satirico HEF Focus, destinato al progetto Vercel esistente `trump-oracolo-
 
 ## Contenuti
 
-- 23 vignette complete, ciascuna con desiderio, titolo, battuta e conseguenza. La nuova scena richiesta dall’autore mostra Trump che addenta una pizza finta servita dalla caricatura di Giorgia Meloni.
-- Tutti i 62 esempi precedenti conservati: 85 esempi complessivi.
+- 24 vignette complete, ciascuna con desiderio, titolo, battuta e conseguenza. Le ultime scene richieste dall’autore mostrano la pizza finta servita da Giorgia Meloni e Trump trasformato in un televisore che parla a una sala vuota.
+- Tutti i 62 esempi precedenti conservati: 86 esempi complessivi.
 - Galleria con ricerca, categorie, avanzamento della collezione e pulsante per la vignetta successiva.
 - Desideri liberi elaborati dalla funzione OpenAI già esistente, con sette trasformazioni classiche disponibili.
 - Cronologia locale, suoni facoltativi, movimento ridotto e condivisione tramite link al desiderio.
