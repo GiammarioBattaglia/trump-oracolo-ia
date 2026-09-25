@@ -1,0 +1,68 @@
+name: Monthly Trump Vignette
+
+on:
+  push:
+    paths:
+      - 'incoming-monthly/*.json'
+      - 'monthly-vignettes.mjs'
+      - 'scripts/publish-monthly-vignette.mjs'
+      - 'scripts/render-monthly-vignette.mjs'
+      - 'scripts/verify-monthly-production.mjs'
+      - '.github/workflows/monthly-vignette.yml'
+  schedule:
+    - cron: '45 10 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monthly-trump-vignette
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated image renderer
+        run: |
+          npm --silent init -y >/dev/null 2>&1
+          npm --silent install --no-save --no-package-lock sharp@0.34.4 >/dev/null 2>&1
+      - name: Check protected image credential
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -n "$OPENAI_API_KEY" ]; then
+            echo "OPENAI_IMAGE_AVAILABLE=true"
+          else
+            echo "OPENAI_IMAGE_AVAILABLE=false"
+          fi
+      - name: Validate and publish one monthly vignette
+        id: publish
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_IMAGE_MODEL: gpt-image-2.5-sunburst
+        run: node scripts/publish-monthly-vignette.mjs
+      - name: Run regression tests
+        run: node --test tests/*.test.mjs
+      - name: Commit generated vignette
+        if: steps.publish.outputs.id != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add monthly-vignettes.mjs assets/vignettes incoming-monthly
+          git commit -m "Publish autonomous monthly Trump vignette: ${{ steps.publish.outputs.id }}"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
+      - name: Verify public production after Vercel deployment
+        if: steps.publish.outputs.id != '' && github.ref == 'refs/heads/main'
+        env:
+          PUBLISHED_ID: ${{ steps.publish.outputs.id }}
+          PUBLISHED_IMAGE: ${{ steps.publish.outputs.image }}
+        run: node scripts/verify-monthly-production.mjs
