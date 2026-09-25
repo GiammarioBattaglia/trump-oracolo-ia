@@ -9,6 +9,10 @@ on:
       - 'scripts/render-monthly-vignette.mjs'
       - 'scripts/verify-monthly-production.mjs'
       - '.github/workflows/monthly-vignette.yml'
+      - 'new-vignettes.mjs'
+      - 'sw.js'
+      - 'tests/**'
+      - 'vercel.json'
   schedule:
     - cron: '45 10 1 * *'
   workflow_dispatch:
