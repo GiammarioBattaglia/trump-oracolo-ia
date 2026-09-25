@@ -47,9 +47,9 @@ test('Vignette mensili autonome: massimo una per mese e fonti verificabili',()=>
  const monthly=NEW_VIGNETTES.filter(x=>x.autonomous===true);
  assert.equal(new Set(monthly.map(x=>x.month)).size,monthly.length);
  for(const item of monthly){
-  assert.match(item.month,/^\\d{4}-\\d{2}$/);
-  assert.match(item.statement_date,/^\\d{4}-\\d{2}-\\d{2}$/);
-  assert(/^Vorrei\\s+/i.test(item.wish));
+  assert.match(item.month,/^\d{4}-\d{2}$/);
+  assert.match(item.statement_date,/^\d{4}-\d{2}-\d{2}$/);
+  assert(/^Vorrei\s+/i.test(item.wish));
   assert.equal(item.factual_verification_pass,true);
   assert.equal(item.satire_quality_pass,true);
   assert.equal(item.political_neutrality_pass,true);
