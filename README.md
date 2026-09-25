@@ -6,8 +6,8 @@ Gioco satirico HEF Focus, destinato al progetto Vercel esistente `trump-oracolo-
 
 ## Contenuti
 
-- 24 vignette complete, ciascuna con desiderio, titolo, battuta e conseguenza. Le ultime scene richieste dall’autore mostrano la pizza finta servita da Giorgia Meloni e Trump trasformato in un televisore che parla a una sala vuota.
-- Tutti i 62 esempi precedenti conservati: 86 esempi complessivi.
+- 24 vignette base complete, ciascuna con desiderio, titolo, battuta e conseguenza, più un canale separato per nuove vignette mensili autonome senza alterare il gioco esistente.
+- Tutti i 62 esempi precedenti sono conservati; il totale cresce automaticamente insieme alle nuove vignette mensili.
 - Galleria con ricerca, categorie, avanzamento della collezione e pulsante per la vignetta successiva.
 - Desideri liberi elaborati dalla funzione OpenAI già esistente, con sette trasformazioni classiche disponibili.
 - Cronologia locale, suoni facoltativi, movimento ridotto e condivisione tramite link al desiderio.
@@ -51,3 +51,18 @@ Su Android/Chrome usare Installa. Su iPhone/iPad aprire in Safari e scegliere Co
 Cronologia, suoni e scene scoperte restano nel browser. I desideri liberi vengono inviati alla funzione del gioco e quindi a OpenAI. Gli esempi sono preparati e non richiedono una chiamata all’IA. Le illustrazioni non vengono generate durante il gioco. La condivisione è volontaria e inserisce il desiderio nel frammento del link.
 
 I prompt delle illustrazioni sono in `ASSET-PROMPTS.md` e `ASSET-PROMPTS-22.md`. Le licenze dei font sono in `licenses/`.
+
+
+## Automazione mensile
+
+La pipeline mensile riutilizza il meccanismo tecnico sperimentato nel progetto Travaglio senza trasformare questa app in un prodotto editoriale diverso.
+
+1. Un turno editoriale esterno seleziona una dichiarazione pubblica verificata di Donald Trump e la parafrasa come desiderio satirico che inizia con “Vorrei…”.
+2. Il JSON validato viene depositato in `incoming-monthly/`.
+3. GitHub Actions applica controlli fail-closed, impedisce più di una vignetta autonoma nello stesso mese, genera un WebP 1120×700 e aggiorna soltanto `monthly-vignettes.mjs` e `assets/vignettes/`.
+4. I test verificano unicità, immagini reali, risoluzione dei desideri, fonti e cache PWA.
+5. Il push su `main` attiva il progetto Vercel esistente; la produzione viene verificata dopo il deploy.
+
+Le 24 vignette base restano in `new-vignettes.mjs`. Il file `monthly-vignettes.mjs` è caricato con strategia network-first e fallback cache, così le copie PWA installate ricevono nuovi contenuti senza versionare ogni mese la shell dell’app.
+
+La generazione immagini richiede il secret GitHub Actions `OPENAI_API_KEY`. In assenza del secret la pipeline non usa fallback grafici e non pubblica.
