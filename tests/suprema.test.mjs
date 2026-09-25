@@ -11,9 +11,9 @@ import vm from 'node:vm';
 const require=createRequire(import.meta.url);
 const oracle=require('../api/oracle.js');
 
-test('24 vignette completate, 24 desideri originali, 86 esempi in totale',()=>{
- assert.equal(NEW_VIGNETTES.length,24);assert.equal(ALL_EXAMPLES.length,86);
- for(const key of ['id','wish','title','line','image'])assert.equal(new Set(NEW_VIGNETTES.map(x=>x[key])).size,24,key);
+test('Catalogo estensibile: vignette complete, desideri originali e nessun duplicato',()=>{
+ assert(NEW_VIGNETTES.length>=24);assert.equal(ALL_EXAMPLES.length,62+NEW_VIGNETTES.length);
+ for(const key of ['id','wish','title','line','image'])assert.equal(new Set(NEW_VIGNETTES.map(x=>x[key])).size,NEW_VIGNETTES.length,key);
  const previous=new Set(LIBRARY.map(x=>x.wish));
  for(const item of NEW_VIGNETTES){
   assert(!previous.has(item.wish));assert(item.wish.length<=220);
@@ -27,8 +27,8 @@ test('24 vignette completate, 24 desideri originali, 86 esempi in totale',()=>{
 });
 
 test('Ricerca e temi restituiscono le vignette corrette',()=>{
- assert.equal(filterVignettes().length,24);
- const affari=filterVignettes('','Affari');assert.equal(affari.length,10);assert(affari.every(x=>x.category==='Affari'));
+ assert.equal(filterVignettes().length,NEW_VIGNETTES.length);
+ const affari=filterVignettes('','Affari');assert(affari.length>=10);assert(affari.every(x=>x.category==='Affari'));
  assert(filterVignettes('LIQUIDITA').some(x=>x.id==='12-liquidita-infinita'));
  assert.equal(filterVignettes('parola inesistente zzzz').length,0);
 });
@@ -40,7 +40,22 @@ test('Tutte le immagini sono WebP reali, distinte e non vuote',async()=>{
   assert.equal(data.toString('ascii',0,4),'RIFF');assert.equal(data.toString('ascii',8,12),'WEBP');assert((await stat(file)).size>20000);
   hashes.add(createHash('sha256').update(data).digest('hex'));
  }
- assert.equal(hashes.size,24);
+ assert.equal(hashes.size,NEW_VIGNETTES.length);
+});
+
+test('Vignette mensili autonome: massimo una per mese e fonti verificabili',()=>{
+ const monthly=NEW_VIGNETTES.filter(x=>x.autonomous===true);
+ assert.equal(new Set(monthly.map(x=>x.month)).size,monthly.length);
+ for(const item of monthly){
+  assert.match(item.month,/^\\d{4}-\\d{2}$/);
+  assert.match(item.statement_date,/^\\d{4}-\\d{2}-\\d{2}$/);
+  assert(/^Vorrei\\s+/i.test(item.wish));
+  assert.equal(item.factual_verification_pass,true);
+  assert.equal(item.satire_quality_pass,true);
+  assert.equal(item.political_neutrality_pass,true);
+  assert(Array.isArray(item.sources)&&item.sources.length>=2);
+  assert.equal(new Set(item.sources.map(x=>new URL(x.url).hostname.replace(/^www\\./,''))).size>=2,true);
+ }
 });
 
 test('Il backend conserva provider, validazione e protezione delle risposte',()=>{
@@ -67,7 +82,8 @@ test('Cache: nessuna API, immagine visitata disponibile offline, nessuna pagina 
  const call=(path,method='GET',mode='cors')=>{response=null;handlers.fetch({request:{url:'https://game.invalid'+path,method,mode},respondWith:p=>response=p,waitUntil:p=>tasks.push(p)});return response};
  assert.equal(call('/api/oracle','POST'),null);assert.equal(call('/api/oracle'),null);
  assert.equal(call('/qa-mobile.html','GET','navigate'),null);
+ assert(await call('/monthly-vignettes.mjs'));await Promise.all(tasks);
  assert((await call('/assets/vignettes/example.webp')).image);await Promise.all(tasks);
- online=false;assert((await call('/assets/vignettes/example.webp')).image);
- assert.deepEqual(writes,['https://game.invalid/assets/vignettes/example.webp']);
+ online=false;assert(await call('/monthly-vignettes.mjs'));assert((await call('/assets/vignettes/example.webp')).image);
+ assert.deepEqual(writes,['https://game.invalid/monthly-vignettes.mjs','https://game.invalid/assets/vignettes/example.webp']);
 });
