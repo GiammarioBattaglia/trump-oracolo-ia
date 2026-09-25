@@ -1,5 +1,7 @@
 // Vignette illustrate, ciascuna associata al proprio desiderio.
-export const NEW_VIGNETTES=[
+import { MONTHLY_VIGNETTES } from './monthly-vignettes.mjs';
+
+const CURATED_VIGNETTES=[
   {
     "id": "01-mondo-tasca",
     "category": "Potere",
@@ -313,3 +315,5 @@ export const NEW_VIGNETTES=[
     "image": "/assets/vignettes/24-trump-tv.webp"
   }
 ];
+
+export const NEW_VIGNETTES=[...CURATED_VIGNETTES,...MONTHLY_VIGNETTES];
