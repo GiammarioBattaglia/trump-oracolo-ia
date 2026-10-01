@@ -14,7 +14,9 @@ on:
       - 'tests/**'
       - 'vercel.json'
   schedule:
-    - cron: '45 7 1 * *'
+    # Preflight anticipato: lascia ampio margine prima del turno editoriale mensile.
+    # GitHub cron usa UTC: 05:30 = 07:30 CEST / 06:30 CET.
+    - cron: '30 5 1 * *'
   workflow_dispatch:
 
 permissions:
