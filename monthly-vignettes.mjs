@@ -76,5 +76,43 @@ export const MONTHLY_VIGNETTES=[
     "image_prompt": "Caricatura editoriale satirica di alta qualità, disegnata a mano con inchiostro e colore, formato orizzontale 8:5. Non è una fotografia autentica.\nPersonaggio principale: caricatura riconoscibile di Donald Trump. Presenza della SUPREMA IA come entità artificiale immaginaria, luminosa e chiaramente non umana.\nPremessa narrativa: Trump formula questo desiderio satirico: Vorrei che l’intelligenza diventasse super.\nLa SUPREMA IA lo esaudisce in modo letterale, paradossale e visivamente immediato. Scena richiesta: Caricatura editoriale orizzontale nello stile dell’universo Trump & la SUPREMA IA. Donald Trump è in un ambiente istituzionale-tecnologico, accanto a server e computer. Davanti a lui la SUPREMA IA, chiaramente artificiale e luminosa, interpreta letteralmente l’idea di Super Intelligence trasformandosi in un supereroe digitale: grande mantello svolazzante, posa eroica, energia luminosa e ingresso teatrale. I computer e i server sullo sfondo restano visivamente normali e invariati, così il contrasto comico è tra il nuovo nome altisonante e la stessa tecnologia. Una sola gag visiva immediata, leggibile su smartphone. Niente testo, lettere, sigle, loghi, fumetti o simboli politici nell’immagine.\nContesto fattuale usato solo per ancorare la parodia a una dichiarazione pubblica verificata: Il 29 settembre 2026 Trump ha firmato un ordine esecutivo che dispone, per l’esecutivo federale, l’uso dei termini “Super Intelligence” e “SI” al posto di “Artificial Intelligence” e “AI”.\nLa scena deve essere umoristica e non elettorale: nessun invito a votare, nessun endorsement, nessuna previsione elettorale, nessuna accusa di reato o condotta non documentata, nessuna insinuazione su salute, capacità mentale o idoneità.\nNon inserire parole, lettere, loghi, citazioni, didascalie o fumetti nell’immagine. I testi restano nell’interfaccia dell’app.\nComposizione pulita, leggibile su smartphone, un solo gag visivo forte, volti ed elementi principali nitidi, niente collage e niente pannelli multipli.",
     "image_model": "gpt-image-2.5-sunburst",
     "published_at": "2026-10-01T09:59:33.306Z"
+  },
+  {
+    "id": "27-eta-oro-scienza",
+    "category": "Potere",
+    "wish": "Vorrei che la scienza entrasse in una nuova età dell’oro.",
+    "chip": "far entrare la scienza in una nuova età dell’oro",
+    "actor": 2,
+    "label": "Potere",
+    "title": "Tutto d’oro. Adesso il microscopio pesa cento chili.",
+    "line": "Concesso. La ricerca non è mai stata così preziosa. Né così pesante.",
+    "text": "La SUPREMA IA prende alla lettera la nuova età dell’oro e trasforma laboratorio, provette e microscopio in oro massiccio. Trump ammira il risultato, mentre uno scienziato non riesce più a sollevare il microscopio.",
+    "alt": "Trump osserva soddisfatto un laboratorio trasformato in oro massiccio dalla Suprema IA, mentre uno scienziato tenta invano di sollevare un pesantissimo microscopio dorato.",
+    "image": "/assets/vignettes/27-eta-oro-scienza.webp",
+    "month": "2026-11",
+    "autonomous": true,
+    "statement_summary": "L’8 ottobre 2026 Trump ha presentato le Medaglie nazionali della scienza e della tecnologia e ha dichiarato l’avvio di una nuova età dell’oro per l’innovazione e la scienza statunitensi.",
+    "statement_date": "2026-10-08",
+    "sources": [
+      {
+        "name": "The White House",
+        "url": "https://www.whitehouse.gov/releases/2026/10/president-trump-presents-national-medals-of-science-and-national-medals-of-technology-and-innovation/"
+      },
+      {
+        "name": "Reuters",
+        "url": "https://www.reuters.com/business/media-telecom/trump-expected-award-science-medal-spacexs-elon-musk-fox-news-reports-2026-10-07/"
+      },
+      {
+        "name": "The Washington Post",
+        "url": "https://www.washingtonpost.com/politics/2026/10/08/trump-tout-innovation-golden-age-amid-funding-cuts-researcher-exodus/"
+      }
+    ],
+    "factual_verification_pass": true,
+    "satire_quality_pass": true,
+    "political_neutrality_pass": true,
+    "satire_notice": "Satira indipendente. Il desiderio e la scena sono invenzioni umoristiche ispirate a una dichiarazione pubblica verificata.",
+    "image_prompt": "Caricatura editoriale satirica di alta qualità, disegnata a mano con inchiostro e colore, formato orizzontale 8:5. Non è una fotografia autentica.\nPersonaggio principale: caricatura riconoscibile di Donald Trump. Presenza della SUPREMA IA come entità artificiale immaginaria, luminosa e chiaramente non umana.\nPremessa narrativa: Trump formula questo desiderio satirico: Vorrei che la scienza entrasse in una nuova età dell’oro.\nLa SUPREMA IA lo esaudisce in modo letterale, paradossale e visivamente immediato. Scena richiesta: Caricatura editoriale orizzontale nello stile dell’universo Trump & la SUPREMA IA. Donald Trump è in un laboratorio scientifico moderno accanto alla SUPREMA IA, entità artificiale luminosa e chiaramente non umana. La SUPREMA IA interpreta letteralmente l’idea di una nuova età dell’oro della scienza: microscopio, provette, tavolo da laboratorio e alcuni strumenti sono diventati oro massiccio, lucente e visibilmente pesantissimo. Un ricercatore in camice prova a sollevare il microscopio dorato ma non riesce, mentre Trump osserva soddisfatto il laboratorio scintillante. Una sola gag visiva immediata, gentile e leggibile su smartphone. Niente testo, lettere, loghi, fumetti, bandiere o simboli elettorali nell’immagine.\nContesto fattuale usato solo per ancorare la parodia a una dichiarazione pubblica verificata: L’8 ottobre 2026 Trump ha presentato le Medaglie nazionali della scienza e della tecnologia e ha dichiarato l’avvio di una nuova età dell’oro per l’innovazione e la scienza statunitensi.\nLa scena deve essere umoristica e non elettorale: nessun invito a votare, nessun endorsement, nessuna previsione elettorale, nessuna accusa di reato o condotta non documentata, nessuna insinuazione su salute, capacità mentale o idoneità.\nNon inserire parole, lettere, loghi, citazioni, didascalie o fumetti nell’immagine. I testi restano nell’interfaccia dell’app.\nComposizione pulita, leggibile su smartphone, un solo gag visivo forte, volti ed elementi principali nitidi, niente collage e niente pannelli multipli.",
+    "image_model": "gpt-image-2.5-sunburst",
+    "published_at": "2026-11-01T09:06:27.882Z"
   }
 ];
